@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.mgsoft.DTO;
+package org.mgsoft.excontrol.DTO;
 
+import java.util.Arrays;
 import java.util.Date;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
@@ -15,7 +16,7 @@ import org.mongodb.morphia.annotations.Reference;
  * @author murilo.goedert
  */
 @Entity("despesas")
-public abstract class AbstractDespesa {
+public abstract class Despesa {
 
     @Id
     private int id;
@@ -23,8 +24,6 @@ public abstract class AbstractDespesa {
     private boolean isMensal;
     private boolean comRateio;
     private double valor;
-    @Reference
-    private CentroDeCusto[] ccus;
     private int pedido;
     private final Date dataCadastro;
     private Rateio[] rateios;
@@ -36,25 +35,26 @@ public abstract class AbstractDespesa {
         this.dataCadastro = new Date();
     }
 
-    public AbstractDespesa(
+    public Despesa(
             String descricao,
             double valor,
-            CentroDeCusto[] ccus,
             int pedido,
             Rateio[] rateios,
             Fornecedor fornecedor) {
         this.descricao = descricao;
         this.valor = valor;
-        this.ccus = ccus;
         this.pedido = pedido;
         this.rateios = rateios;
         this.fornecedor = fornecedor;
     }
-    
-    public AbstractDespesa(){
-        
+
+    public CentroDeCusto getCentroDeCusto() {
+        return rateios[0].getCcu();
     }
-    
+
+    //Auto-Generated
+    public Despesa() {
+    }
 
     public int getId() {
         return id;
@@ -96,14 +96,6 @@ public abstract class AbstractDespesa {
         this.valor = valor;
     }
 
-    public CentroDeCusto[] getCcus() {
-        return ccus;
-    }
-
-    public void setCcus(CentroDeCusto[] ccus) {
-        this.ccus = ccus;
-    }
-
     public int getPedido() {
         return pedido;
     }
@@ -141,9 +133,9 @@ public abstract class AbstractDespesa {
         return "Despesa{" + "id=" + id + ", descricao="
                 + descricao + ", isMensal=" + isMensal
                 + ", comRateio=" + comRateio + ", valor="
-                + valor + ", ccus=" + ccus + ", pedido=" + pedido
-                + ", rateios=" + rateios + ", notasFiscais="
-                + notasFiscais + ", fornecedor=" + fornecedor + '}';
+                + valor + ", pedido=" + pedido
+                + ", rateios=" + Arrays.toString(rateios) + ", notasFiscais="
+                + Arrays.toString(notasFiscais) + ", fornecedor=" + fornecedor + '}';
     }
 
 }

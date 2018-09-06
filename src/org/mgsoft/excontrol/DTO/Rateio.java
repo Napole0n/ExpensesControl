@@ -3,30 +3,30 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.mgsoft.DTO;
+package org.mgsoft.excontrol.DTO;
 
 /**
  *
  * @author murilo.goedert
  */
 public class Rateio {
-    
-    private int ccuId;
+
+    private CentroDeCusto ccu;
     private int percentual;
 
-    public Rateio(int ccuId, int percentual) {
-        this.ccuId = ccuId;
+    public Rateio(CentroDeCusto ccu, int percentual) {
+        this.ccu = ccu;
         this.percentual = percentual;
     }
+    
+    public Rateio(){}
 
-    
-    
-    public int getCcuId() {
-        return ccuId;
+    public CentroDeCusto getCcu() {
+        return ccu;
     }
 
-    public void setCcuId(int ccuId) {
-        this.ccuId = ccuId;
+    public void setCcu(CentroDeCusto ccu) {
+        this.ccu = ccu;
     }
 
     public int getPercentual() {
@@ -36,7 +36,12 @@ public class Rateio {
     public void setPercentual(int percentual) {
         this.percentual = percentual;
     }
+
+    @Override
+    public String toString() {
+        return "Rateio{" + "ccu=" + ccu + ", percentual=" + percentual + '}';
+    }
     
     
-    
+
 }

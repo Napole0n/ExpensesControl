@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.mgsoft.mongo;
+package org.mgsoft.excontrol.mongo;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -18,11 +18,21 @@ import org.json.JSONObject;
 public class MongoConfigHelper {
 
     private final JSONObject configObg;
-    private String jsonObjPath = "src/org/mgsoft/mongo/conf.json";
+    private String jsonObjPath = "src/org/mgsoft/excontrol/mongo/conf.json";
 
-    public MongoConfigHelper(String jsonFilePath) throws IOException {
+    public MongoConfigHelper(String jsonFilePath) {
         this.jsonObjPath = jsonFilePath;
-        this.configObg = new JSONObject(readConfig(jsonFilePath));
+        JSONObject ob;
+        try {
+            ob = new JSONObject(readConfig(jsonFilePath));
+        } catch (IOException ex) {
+            JSONObject b = new JSONObject();
+            b.put("mongo_port", 27017);
+            b.put("mongo_adress", "localhost");
+            b.put("mapped_package", "org.mgsoft.DTO");
+            ob = b;
+        }
+        this.configObg = ob;
     }
 
     public MongoConfigHelper() throws IOException {

@@ -1,4 +1,4 @@
-package org.mgsoft.DTO;
+package org.mgsoft.excontrol.DTO;
 
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
@@ -18,6 +18,8 @@ public class Fornecedor {
         this.nome = nome;
         this.cnpj = cnpj;
     }
+    
+    public Fornecedor(){}
 
     public String getNome() {
         return nome;
@@ -34,5 +36,12 @@ public class Fornecedor {
     public void setCnpj(String cnpj) {
         this.cnpj = cnpj;
     }
+
+    @Override
+    public String toString() {
+        return "Fornecedor{" + "nome=" + nome + ", cnpj=" + cnpj + '}';
+    }
+    
+    
 
 }

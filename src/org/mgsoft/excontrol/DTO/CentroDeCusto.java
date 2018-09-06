@@ -3,24 +3,24 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.mgsoft.DTO;
+package org.mgsoft.excontrol.DTO;
 
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Id;
 
 /**
  *
  * @author murilo.goedert
  */
-@Entity("centros_de_custo")
+
 public class CentroDeCusto {
 
     public CentroDeCusto(int id, String descricao) {
         this.id = id;
         this.descricao = descricao;
     }
+    
+    public CentroDeCusto(){}
 
-    @Id
+
     private int id;
     
     private String descricao;
@@ -40,5 +40,12 @@ public class CentroDeCusto {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
+
+    @Override
+    public String toString() {
+        return "CentroDeCusto{" + "id=" + id + ", descricao=" + descricao + '}';
+    }
+    
+    
 
 }
