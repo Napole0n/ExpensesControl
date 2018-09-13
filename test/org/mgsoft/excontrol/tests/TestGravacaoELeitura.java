@@ -16,6 +16,7 @@ import static org.junit.Assert.*;
 import org.mgsoft.excontrol.DTO.CentroDeCusto;
 import org.mgsoft.excontrol.DTO.Despesa;
 import org.mgsoft.excontrol.DTO.DespesaMensal;
+import org.mgsoft.excontrol.DTO.DespesaPontual;
 import org.mgsoft.excontrol.DTO.Fornecedor;
 import org.mgsoft.excontrol.DTO.Rateio;
 import org.mgsoft.excontrol.factory.DespesaFactory;
@@ -56,22 +57,25 @@ public class TestGravacaoELeitura {
         MongoUtil mutil = new MongoUtil("tests");
         DespesaFactory fac = new DespesaFactory();
         CentroDeCusto c = new CentroDeCusto(4105, "TI");
-        Fornecedor f = new Fornecedor("Inventti", "123456789");
-        
+
         Rateio r = new Rateio(c, 100);
 
+        Fornecedor f = new Fornecedor("Inventti", "123456789");
         Despesa d1 = fac.criarDespesaMensal("NFE-Pack", 2400d, new Rateio[]{r}, 1234, f, 5, new Date());
-        
+        Despesa d2 = fac.criarDespesaPontual("Camera Ração", 240.80d, new Rateio[]{r}, 1234, f);
+        d2.setId(1);
+
         mutil.save(f);
         mutil.save(d1);
-        
-        Despesa dRet = mutil.getDataStore().get(DespesaMensal.class,0);
-        
-        assertEquals(d1.toString(), dRet.toString());
-        
-        //org.mgsoft.excontrol.DTO.DespesaMensal<Despesa{id=0, descricao=NFE-Pack, isMensal=true, comRateio=false, valor=2400.0, pedido=1234, rateios=[Rateio{ccu=CentroDeCusto{id=4105, descricao=TI}, percentual=100}], notasFiscais=null, fornecedor=Fornecedor{nome=Inventti, cnpj=123456789}}
-        //org.mgsoft.excontrol.DTO.DespesaMensal<Despesa{id=0, descricao=NFE-Pack, isMensal=true, comRateio=false, valor=2400.0, pedido=1234, rateios=[Rateio{ccu=CentroDeCusto{id=4105, descricao=TI}, percentual=100}], notasFiscais=null, fornecedor=Fornecedor{nome=Inventti, cnpj=123456789}}
-        
+        mutil.save(d2);
+
+        Despesa dRet = mutil.getDataStore().get(DespesaMensal.class, 0);
+        Despesa dRet2 = mutil.getDataStore().get(DespesaPontual.class, 1);
+        Fornecedor fRet = mutil.getDataStore().get(Fornecedor.class, "123456789");
+
+        assertEquals(((DespesaMensal) d1).toString(), ((DespesaMensal) dRet).toString());
+        assertEquals(((DespesaPontual) d2).toString(), ((DespesaPontual) dRet2).toString());
+        assertEquals(f.toString(), fRet.toString());
 
     }
 

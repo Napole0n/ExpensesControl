@@ -5,7 +5,7 @@
  */
 package org.mgsoft.excontrol.DTO;
 
-
+import java.util.Arrays;
 import org.mongodb.morphia.annotations.Entity;
 
 /**
@@ -37,6 +37,11 @@ public class DespesaMensal extends Despesa {
 
     public void setParcelas(Parcela[] parcelas) {
         this.parcelas = parcelas;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + "parcelas=" + Arrays.toString(parcelas) + '}';
     }
 
 }

@@ -5,12 +5,15 @@
  */
 package org.mgsoft.excontrol.DTO;
 
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Id;
+
 
 /**
  *
  * @author murilo.goedert
  */
-
+@Entity("centro_de_custo")
 public class CentroDeCusto {
 
     public CentroDeCusto(int id, String descricao) {
@@ -20,7 +23,7 @@ public class CentroDeCusto {
     
     public CentroDeCusto(){}
 
-
+    @Id
     private int id;
     
     private String descricao;

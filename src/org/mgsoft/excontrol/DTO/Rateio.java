@@ -5,12 +5,17 @@
  */
 package org.mgsoft.excontrol.DTO;
 
+import org.mongodb.morphia.annotations.Embedded;
+
+
 /**
  *
  * @author murilo.goedert
  */
+
 public class Rateio {
 
+    @Embedded
     private CentroDeCusto ccu;
     private int percentual;
 
@@ -18,8 +23,9 @@ public class Rateio {
         this.ccu = ccu;
         this.percentual = percentual;
     }
-    
-    public Rateio(){}
+
+    public Rateio() {
+    }
 
     public CentroDeCusto getCcu() {
         return ccu;
@@ -41,7 +47,5 @@ public class Rateio {
     public String toString() {
         return "Rateio{" + "ccu=" + ccu + ", percentual=" + percentual + '}';
     }
-    
-    
 
 }
