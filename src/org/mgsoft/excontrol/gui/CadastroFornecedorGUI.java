@@ -7,13 +7,19 @@ package org.mgsoft.excontrol.gui;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import org.mgsoft.excontrol.DTO.Despesa;
+import org.mgsoft.excontrol.DTO.DespesaPontual;
 
 import org.mgsoft.excontrol.DTO.Fornecedor;
 import org.mgsoft.excontrol.mongo.MongoUtil;
+import org.mgsoft.excontrol.util.Reference;
+import org.mongodb.morphia.query.FindOptions;
 import org.mongodb.morphia.query.Query;
 
 /**
@@ -23,6 +29,7 @@ import org.mongodb.morphia.query.Query;
 public class CadastroFornecedorGUI extends javax.swing.JFrame {
 
     private MongoUtil mutil;
+    private Fornecedor fSelected;
 
     /**
      * Creates new form CadastroFornecedorGUI
@@ -39,7 +46,7 @@ public class CadastroFornecedorGUI extends javax.swing.JFrame {
     private void initGrid() throws IOException {
 
         if (mutil == null) {
-            mutil = new MongoUtil("test");
+            mutil = new MongoUtil(Reference.DATABASE_NAME);
 
         }
         DefaultTableModel tmdl = (DefaultTableModel) tabelaForn.getModel();
@@ -90,6 +97,7 @@ public class CadastroFornecedorGUI extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelaForn = new javax.swing.JTable();
+        btExcluir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -165,15 +173,32 @@ public class CadastroFornecedorGUI extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tabelaForn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                tabelaFornMousePressed(evt);
+            }
+        });
         jScrollPane1.setViewportView(tabelaForn);
+
+        btExcluir.setText("Excluir");
+        btExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btExcluirActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 344, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 344, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(159, 159, 159)
+                        .addComponent(btExcluir)))
                 .addContainerGap(30, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -181,7 +206,9 @@ public class CadastroFornecedorGUI extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(100, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(btExcluir)
+                .addContainerGap(56, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -223,6 +250,35 @@ public class CadastroFornecedorGUI extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btCadastrarActionPerformed
 
+    private void tabelaFornMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaFornMousePressed
+
+    }//GEN-LAST:event_tabelaFornMousePressed
+
+    private void btExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btExcluirActionPerformed
+        int i = tabelaForn.getSelectedRow();
+        int j = tabelaForn.getSelectedColumn();
+        String[] s;
+        if (j == 1) {
+            s = new String[]{tabelaForn.getValueAt(i, 0).toString(), tabelaForn.getValueAt(i, j).toString()};
+        } else {
+            s = new String[]{tabelaForn.getValueAt(i, j).toString(), tabelaForn.getValueAt(i, 1).toString()};
+        }
+        fSelected = new Fornecedor(s[0], s[1]);
+
+        int opt = JOptionPane.showConfirmDialog(this, "Tem certeza?");
+        if (opt == 0) {
+
+            try {
+                getMongo().getDataStore().delete(Fornecedor.class, fSelected.getCnpj());
+                ((DefaultTableModel) tabelaForn.getModel()).removeRow(i);
+            } catch (IOException ex) {
+                Logger.getLogger(CadastroFornecedorGUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+
+    }//GEN-LAST:event_btExcluirActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -260,6 +316,7 @@ public class CadastroFornecedorGUI extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btCadastrar;
+    private javax.swing.JButton btExcluir;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
